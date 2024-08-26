@@ -1,16 +1,23 @@
 import fs from 'fs';
 import Sequelize from 'sequelize';
-import { config } from './config';
+import config from './config.js';
 
-import Logger from '../utils/logger';
+import Logger from '../utils/logger.js';
 
-class Database {
+class Database { // gerencia conexao com o banco de dados e o carregamento dos models usando sequelize
 	constructor() {
 		this.models = {};
 		this.databaseOptions = {
-			dialect: 'postgres',
-			port: process.env.DB_PORT || 5432,
-			logging: false,
+			dialect: config.dialect,
+			host: config.host,
+			port: config.port || 5432,
+			username: config.username,
+			password: config.password,
+			database: config.database,
+			define: config.define,
+			dialectOptions: config.dialectOptions,
+			timezone: config.timezone,
+			logging: false, // pra evitar que fique registrando as queries sql no console
 			minifyAliases: true,
 			query: {
 				raw: true
@@ -21,7 +28,12 @@ class Database {
 			}
 		};
 
-		this._instance = new Sequelize(config.database.dbname, null, null, this.databaseOptions);
+		this._instance = new Sequelize(
+			this.databaseOptions.database,
+			this.databaseOptions.username,
+			this.databaseOptions.password,
+			this.databaseOptions
+		);
 	}
 
 	_loadModels() {

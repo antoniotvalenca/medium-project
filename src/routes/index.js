@@ -1,5 +1,7 @@
-import AttendanceRoutes from './attendance';
+import UserRoutes from './user';
+import PostRoutes from './post';
 
 export {
-	AttendanceRoutes
+	UserRoutes,
+	PostRoutes
 };

@@ -1,5 +1,5 @@
-import AttendanceController from './attendance';
+import UserController from './user';
 
 export {
-	AttendanceController
+	UserController,
 };

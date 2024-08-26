@@ -1,5 +1,7 @@
-import AttendanceService from './attendance';
+import UserService from "./user";
+import PostService from "./post";
 
 export {
-	AttendanceService
+	UserService,
+	PostService
 };

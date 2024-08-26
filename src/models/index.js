@@ -1,7 +1,9 @@
-import User from './user';
-import Attendance from './attendance';
+import User from "./user";
+import Post from "./post";
+import Like from "./like";
 
 export {
 	User,
-	Attendance
+	Post,
+	Like
 };

@@ -1,27 +1,40 @@
-import AuthUtils from '@utils';
+import jwt from "jsonwebtoken";
+import { User } from "@models";
 
-export default class AuthMiddleware {
-	static isAuthorized(req, res, next) {
-		const errorResponse = {
-			status: 'error',
-			code: 403,
-			message: 'Sessão expirada. Logue novamente no sistema para obter acesso.',
-		};
+const auth = async (req, res, next) => {
+    const { authorization } = req.headers;
 
-		const token = AuthUtils.getBearerToken(req);
-		const decodedToken = AuthUtils.decodeData(token, process.env.APP_SECRET_KEY);
+    if (!authorization) {
+        return res.status(401).json({
+            errors: ['Usuário não está logado'],
+        });
+    }
 
-		if (!decodedToken || !decodedToken.user || !decodedToken.user.id) {
-			res.status(403).json(errorResponse);
+    const [, token] = authorization.split(' ');
 
-			return;
-		}
+    try {
+        const data = jwt.verify(token, process.env.TOKEN_SECRET);
+        const { id, email } = data;
 
-		req.auth = {
-			user_id: decodedToken.user.id,
-			company_id: decodedToken.user.log_in
-		};
+        const user = await User.findOne({
+            where: {
+                id,
+                email
+            },
+            raw: true,
+        });
 
-		next();
-	}
-}
+        if (!user) throw new Error('Invalid Credentials');
+
+        req.user_id = id;
+        req.email = email;
+
+        return next();
+    } catch (e) {
+        return res.status(401).json({
+            message: ['Token expirado ou inválido'],
+        });
+    }
+};
+
+export default auth;

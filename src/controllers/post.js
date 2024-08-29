@@ -1,8 +1,13 @@
+import BaseController from "./base";
 import { PostService } from "@services";
 
-class PostController {
+class PostController extends BaseController {
 	constructor() {
+		super();
+
 		this.PostService = new PostService();
+
+		this.bindActions(["getById", "getAll", "create", "delete", "like", "unlike"]);
 	}
 
 	async getById (req, res) {
@@ -12,9 +17,9 @@ class PostController {
 
 			if (!post) return res.status(404).json({ message: "Nenhum post foi achado."})
 
-			return res.json(post)
+			this.successHandler(post, res)
 		} catch (e) {
-			return res.status(500).json({ message: "erro achar post: ", e })
+			this.errorHandler(e, req, res);
 		}
 	}
 
@@ -26,55 +31,62 @@ class PostController {
                 return res.status(404).json({ message: "No posts found" });
             }
 
-            return res.json(posts);
+			this.successHandler(posts, res)
 		} catch (e) {
-			return res.status(500).json({ message: "erro ao listar posts: ", e })
+			this.errorHandler(e, req, res);
 		}
 	}
 
 	async create (req, res) {
 		try {
-			const title = req.body.title;
-			const text = req.body.text;
-			const user_id = req.user_id
+			const post = {
+				title: req.body.title,
+				text: req.body.text,
+				user_id: req.user_id
+			}
 
 			if (!user_id) return res.status(403).json({ message: "Você não está logado."})
 
-			const new_post = await this.PostService.createPost(title, text, user_id);
+			const new_post = await this.PostService.createPost(post);
 
-			return res.status(201).json(new_post);
+			this.successHandler(new_post, res)
 		} catch (e) {
-			return res.status(500).json({ message: "erro ao criar posts: ", e })
+			this.errorHandler(e, req, res);
 		}
 	}
 
 	async delete (req, res) {
 		try {
-			const user_id = req.user_id
-			const post_id = req.params.id;
-			const deleted = await this.PostService.deletePost(post_id, user_id);
+			const data = {
+				id: req.parans.id,
+				user_id: req.user_id,
+				is_deleted: false
+			};
+
+			const deleted = await this.PostService.deletePost(data);
 
 			if (!deleted) {
                 return res.status(404).json({ message: "Post não encontrado." });
             }
 
-			return res.json({ message: `Post ${post_id} deletado com sucesso.` });
+			this.successHandler(deleted, res)
 		} catch (e) {
-			return res.status(500).json({ message: "erro ao deletar post: ", e })
+			this.errorHandler(e, req, res);
 		}
 	}
 
 	async like(req, res) {
 		try {
+			const like = {
+				post_id: req.params.id,
+				user_id: req.user_id
+			}
 
-			const post_id = req.params.id;
-			const user_id = req.user_id;
-
-			await this.PostService.likePost(post_id, user_id);
-
+			await this.PostService.likePost(like);
+			this.successHandler(true, res)
 			return res.json({ message: `Post "${post_id}" foi curtido`});
-		} catch (error) {
-			return res.status(500).json({ message: "erro ao dar like em post: ", e })
+		} catch (e) {
+			this.errorHandler(e, req, res);
 		}
 	}
 
@@ -86,8 +98,8 @@ class PostController {
 			await this.PostService.dislikePost(post_id, user_id);
 
 			this.successHandler(true, res);
-		} catch (error) {
-			this.errorHandler(error, req, res);
+		} catch (e) {
+			this.errorHandler(e, req, res);
 		}
 	}
 };

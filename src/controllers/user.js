@@ -1,9 +1,14 @@
 import { pick } from "lodash";
-import { UserService } from "@services";
+import BaseController from "./base.js";
+import { UserService } from "../services";
 
-class UserController {
+class UserController extends BaseController {
 	constructor() {
+		super()
+
 		this.UserService = new UserService();
+
+		this.bindActions(["login", "create", "update", "delete"]);
 	}
 
 	async login (req, res) {
@@ -11,9 +16,9 @@ class UserController {
 			const login_infos = pick(req.body, ["email", "password"]);
 			const login_token = await this.UserService.loginUser(login_infos);
 
-			return res.json(login_token);
+			this.successHandler(login_token, res)
 		} catch (e) {
-			res.status(500).json({ message: "erro ao logar: ", e });
+			this.errorHandler(e, req, res);
 		}
 
 	}
@@ -23,9 +28,9 @@ class UserController {
 			const user_data = pick(req.body, ["email", "password", "name"]);
 			const user = await this.UserService.createUser(user_data);
 
-			return res.json({ user });
+			this.successHandler(user, res)
 		} catch (e) {
-			return res.status(500).json({ message: "erro ao criar user: ", e })
+			this.errorHandler(e, req, res);
 		}
 	}
 
@@ -38,9 +43,9 @@ class UserController {
 
 			const userChange = await this.UserService.updateUser(change, id);
 
-			return res.json({ userChange });
+			this.successHandler(userChange, res)
 		} catch (e) {
-			return res.status(500).json({ message: "erro ao atualizar user: ", e })
+			this.errorHandler(e, req, res);
 		};
 	}
 
@@ -49,9 +54,9 @@ class UserController {
 			const id = req.user_id;
 			const deletedUser = await this.UserService.deleteUser(id);
 
-			return res.json(deletedUser);
+			this.successHandler(deletedUser, res)
 		} catch (e) {
-			return res.status(500).json({ message: "erro ao deletar user: ", e })
+			this.errorHandler(e, req, res);
 		}
 	}
 };

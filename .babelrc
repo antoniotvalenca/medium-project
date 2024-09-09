@@ -2,6 +2,7 @@
 	"compact": true,
 	"minified": true,
 	"comments": false,
+	"sourceMaps": false,
 	"sourceType": "unambiguous",
 	"presets": [
 		[

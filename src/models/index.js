@@ -1,6 +1,6 @@
-import User from "./user";
-import Post from "./post";
-import Like from "./like";
+import User from "./user.js";
+import Post from "./post.js";
+import Like from "./like.js";
 
 export {
 	User,

@@ -10,6 +10,13 @@ export default class UserRoutes extends BaseRoutes {
     }
 
     setup() {
+
+		console.log("got here 1")
+
+		this.router.get('/test', (req, res) => {
+			res.send('Test route working');
+		});
+
         this.router.post(
             "/login",
             this.validateSchema(UserSchema.login),
@@ -21,7 +28,7 @@ export default class UserRoutes extends BaseRoutes {
             this.validateSchema(UserSchema.create),
             this.userController.create.bind(this.userController)
         );
-
+		console.log("got here 2")
         this.router.put(
             "/:userid",
             auth,
@@ -32,7 +39,7 @@ export default class UserRoutes extends BaseRoutes {
         this.router.delete(
             "/:userid",
             auth,
-            this.userController.remove.bind(this.userController)
+            this.userController.delete.bind(this.userController)
         );
 
         return this.router;

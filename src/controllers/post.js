@@ -7,7 +7,7 @@ class PostController extends BaseController {
 
 		this.PostService = new PostService();
 
-		this.bindActions(["getById", "getAll", "create", "delete", "like", "unlike"]);
+		this.bindActions(["getById", "getAll", "create", "delete", "like", "dislike"]);
 	}
 
 	async getById (req, res) {

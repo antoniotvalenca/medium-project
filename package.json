@@ -1,7 +1,7 @@
 {
   "name": "boilerplate-api",
   "version": "v1.0.2",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "git@github.com:amigoapp/boilerplate-api.git",
   "author": "Augusto Ferreira <augusto.ferreira@amigoapp.com.br>",
   "license": "MIT",
@@ -11,8 +11,8 @@
     "yarn": ">= 1.19.1"
   },
   "scripts": {
-    "start": "node build/index.js",
-    "start:dev": "NODE_ENV=development nodemon --delay 500ms --inspect --exec babel-node index.js",
+    "start": "node build/server.js",
+    "start:dev": "NODE_ENV=development nodemon --delay 500ms --inspect --exec babel-node server.js",
     "lint": "eslint --ext .js ./src",
     "lint:fix": "yarn lint --fix",
     "test": "NODE_ENV=test mocha --recursive ./src/**/*.spec.js",
@@ -20,7 +20,7 @@
     "test:integration": "NODE_ENV=test mocha ./src/test/integration",
     "build": "yarn build:api && yarn build:templates && yarn upload-sourcemaps",
     "upload-sourcemaps": "node upload-sourcemaps.js",
-    "build:api": "babel ./index.js --out-dir ./build --source-maps && babel ./src --out-dir ./build/src --source-maps",
+    "build:api": "babel ./server.js --out-dir ./build --source-maps && babel ./src --out-dir ./build/src --source-maps",
     "build:templates": "copy './src/templates/*.html' './build/src/templates'"
   },
   "dependencies": {
@@ -38,6 +38,7 @@
     "express": "^4.17.2",
     "handlebars": "^4.7.7",
     "helmet": "^5.0.2",
+    "http": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",

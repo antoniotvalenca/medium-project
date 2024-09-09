@@ -11,7 +11,7 @@ export default class PostRoutes extends BaseRoutes {
 
     setup() {
         this.router.post(
-            "/post/create",
+            "/create",
             auth,
             this.validateSchema(PostSchema.create),
             this.postController.create.bind(this.postController)

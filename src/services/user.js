@@ -24,46 +24,64 @@ class UserService {
     };
 
 	async updateUser(change, user_id) {
-		try {
-			const userEdit = await User.update(change, {
-				where: { id: user_id }
-			});
-
-			return userEdit;
-		} catch (e) {
-			throw new Error(`Erro ao atualizar user: ${e.message}`);
-		}
-	}
-
-
-	async createUser(user) {
-		const is_user_created = await User.findOne({
-			where: { email: user.email },
+		const userEdit = await User.update(change, {
+			where: { id: user_id }
 		});
 
-		if (is_user_created) throw new Error('Email já está sendo usado');
+		return userEdit;
+	};
+
+
+	async createUser(useree) {
 
 		try {
-			const user_creation = await User.create(user);
-			return user_creation;
-		} catch (e) {
-			throw new Error(`Erro ao criar usuário: ${e.message}`);
+			const x = useree;
+			// Teste findOne
+			const user = await User.findOne({ where: { email: 'antoniotvalenca@gmail.com' } });
+			console.log("Find One Result:", user);
+
+			// Teste create
+			const newUser = await User.create({
+				email: 'antoniotvalenca@gmail.com',
+				password: 'Abc123*1001',
+				name: 'antonio valenca'
+			});
+			console.log("User Created:", newUser);
+		} catch (error) {
+			console.error("Error in testUserModel:", error);
 		}
+		// console.log("User to be created:", user);
+
+		// try {
+		// 	const is_user_created = await User.findOne({
+		// 		where: { email: user.email },
+		// 	});
+
+		// 	console.log("User found:", is_user_created);
+
+		// 	if (is_user_created) throw new Error('Email já está sendo usado');
+
+		// 	console.log("Creating user:", user);
+		// 	const user_creation = await User.create(user);
+		// 	console.log("User created:", user_creation);
+
+		// 	return user_creation;
+		// } catch (error) {
+		// 	console.error("Error creating user:", error);
+		// 	throw error; // Re-throw the error to be handled by the caller
+		// }
 	}
+
 
 
 	async deleteUser(user_id) {
-		try {
-			const user_delete = await User.update(
-				{ is_deleted: true },
-				{ where: { id: user_id } }
-			);
+		 await User.update(
+			{ is_deleted: true },
+			{ where: { id: user_id } }
+		);
 
 			return user_delete;
-		} catch (e) {
-			throw new Error(`Erro ao deletar user: ${e.message}`);
-		}
 	};
-}
+};
 
 export default UserService;

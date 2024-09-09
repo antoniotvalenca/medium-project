@@ -8,26 +8,18 @@ const password_rules = yup
   .required("Senha é obrigatória.");
 
 const schema = {
-	create: {
-		body: yup
-			.object({
-				name: yup.string().required(),
-				email: yup.string().email().required(),
-				password: password_rules,
-			})
-			.noUnknown(true, "Teclas desconhecidas não são permitidas."),
-	},
-	login: {
-		body: yup
-			.object({
-				email: yup.string().email().required(),
-				password: yup.string().required("Senha é obrigatória."),
-			})
-			.noUnknown(),
-	},
+    create: yup.object({
+        name: yup.string().required(),
+        email: yup.string().email().required(),
+        password: password_rules,
+    }).noUnknown(true, "Teclas desconhecidas não são permitidas."),
+    login: yup.object({
+        email: yup.string().email().required(),
+        password: yup.string().required("Senha é obrigatória."),
+    }).noUnknown(),
 };
 
 export default {
-	login: schema.login,
-	create: schema.create,
+    login: schema.login,
+    create: schema.create,
 };

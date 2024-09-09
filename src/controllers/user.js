@@ -24,6 +24,7 @@ class UserController extends BaseController {
 	}
 
 	async create (req, res) {
+		console.log("Entering create method");
 		try {
 			const user_data = pick(req.body, ["email", "password", "name"]);
 			const user = await this.UserService.createUser(user_data);

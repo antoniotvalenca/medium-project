@@ -1,7 +1,8 @@
-import bcrypt from "bcryptjs";
-import Sequelize, { Model } from "sequelize";
+import Sequelize from 'sequelize';
+import BaseModel from "./base.js";
+import bcrypt from 'bcryptjs';
 
-class User extends Model {
+class User extends BaseModel {
   static init(sequelize) {
     super.init(
       {
@@ -31,8 +32,8 @@ class User extends Model {
       {
         sequelize,
         timestamps: true,
-        updatedAt: "updated_at",
-        createdAt: "created_at",
+        updatedAt: 'updated_at',
+        createdAt: 'created_at',
         paranoid: false,
         hooks: {
           beforeCreate: async (user) => {
@@ -44,8 +45,10 @@ class User extends Model {
   }
 
   static associate(models) {
-    this.hasMany(models.Post, { foreignKey: "user_id" });
+	this.hasMany(models.Post, { foreignKey: 'user_id' });
+	this.hasMany(models.Like, { foreignKey: 'user_id' });
   }
+
 }
 
 export default User;

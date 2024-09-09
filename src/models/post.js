@@ -1,6 +1,7 @@
-import Sequelize, { Model } from "sequelize";
+import Sequelize from 'sequelize';
+import BaseModel from "./base.js";
 
-class Post extends Model {
+class Post extends BaseModel {
   static init(sequelize) {
     super.init(
       {
@@ -41,16 +42,18 @@ class Post extends Model {
       {
         sequelize,
         timestamps: true,
-        updatedAt: "updated_at",
-        createdAt: "created_at",
-        paranoid: false,  // Desabilita o uso de 'deletedAt'
+        updatedAt: 'updated_at',
+        createdAt: 'created_at',
+        paranoid: false,
       }
     );
   }
 
   static associate(models) {
-    this.belongsTo(models.User, { foreignKey: "user_id" });
+	this.belongsTo(models.User, { foreignKey: 'user_id' });
+	this.hasMany(models.Like, { foreignKey: 'post_id' });
   }
+
 }
 
 export default Post;

@@ -79,7 +79,6 @@ class Database { // gerencia conexao com o banco de dados e o carregamento dos m
 
 
 	_instantiateModels() {
-		console.log(JSON.stringify(this.models, null, 2));
 		Object.values(this.models)
 			.filter(model => typeof model.associate === "function")
 			.forEach(model => {
@@ -116,8 +115,11 @@ class Database { // gerencia conexao com o banco de dados e o carregamento dos m
 	}
 
 	connect() {
+		console.log("antes")
 		this._loadModels();
+		console.log("meio")
 		this._instantiateModels();
+		console.log("depois")
 
 		return this._authenticate();
 	}

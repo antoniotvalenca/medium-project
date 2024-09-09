@@ -54,6 +54,7 @@ class App {
     async start() {
 		await this.initializeModules();
 		this.setup();
+		console.log(1)
 
         this.httpServer.listen(this.port, () => {
             console.log(`Server is running on port ${this.port}`);

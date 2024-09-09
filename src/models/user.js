@@ -3,8 +3,8 @@ import BaseModel from "./base.js";
 import bcrypt from 'bcryptjs';
 
 class User extends BaseModel {
-  static init(sequelize) {
-    super.init(
+  static load(sequelize) {
+    return super.init(
       {
         id: {
           type: Sequelize.INTEGER,

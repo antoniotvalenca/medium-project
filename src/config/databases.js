@@ -62,7 +62,7 @@ class Database { // gerencia conexao com o banco de dados e o carregamento dos m
 						return;
 					}
 
-					this.models[Model.name] = Model.init(this._instance);
+					this.models[Model.name] = Model.load(this._instance);
 
 					if (this.models[Model.name]) {
 						console.log(`Model initialized: ${Model.name}`);

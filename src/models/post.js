@@ -2,8 +2,8 @@ import Sequelize from 'sequelize';
 import BaseModel from "./base.js";
 
 class Post extends BaseModel {
-  static init(sequelize) {
-    super.init(
+  static load(sequelize) {
+    return super.init(
       {
         id: {
           type: Sequelize.INTEGER,
